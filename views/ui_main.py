@@ -9,7 +9,7 @@ class ExpenseTrackerApp:
     def __init__(self):
         create_table()  
         self.root = tk.Tk()
-        self.root.title("Stylish Expense Tracker")
+        self.root.title("Expense Tracker")
         self.root.geometry("800x600") 
         self.root.configure(bg="#ECEFF4")  
         self.root.resizable(False, False)
