@@ -2,35 +2,32 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 from tkinter import PhotoImage
 from controllers.expense_controller import add_new_expense, get_all_expenses, calculate_total_expenses
-from database import create_table  # Import the create_table function
+from database import create_table 
 import matplotlib.pyplot as plt
 
 class ExpenseTrackerApp:
     def __init__(self):
-        create_table()  # Ensure the table is created
+        create_table()  
         self.root = tk.Tk()
         self.root.title("Stylish Expense Tracker")
-        self.root.geometry("800x600")  # Main window size
-        self.root.configure(bg="#ECEFF4")  # Light background for whole window
+        self.root.geometry("800x600") 
+        self.root.configure(bg="#ECEFF4")  
         self.root.resizable(False, False)
 
-        # Centering container frame
         self.main_frame = ttk.Frame(self.root, padding="20 20 20 20")
-        self.main_frame.pack(expand=True)  # Ensures center alignment
-        self.main_frame.pack_propagate(0)  # Prevents shrinking
+        self.main_frame.pack(expand=True)  
+        self.main_frame.pack_propagate(0)  
 
         self.build_ui()
 
     def build_ui(self):
-        # # Optional logo if available
-        # try:
-        #     self.logo = PhotoImage(file="assets/logo.png")
-        #     logo_label = ttk.Label(self.main_frame, image=self.logo)
-        #     logo_label.grid(row=0, column=0, pady=20, columnspan=2)
-        # except Exception as e:
-        #     print(f"Error loading logo: {e}")
+        try:
+            self.logo = PhotoImage(file="assets/logo.png")
+            logo_label = ttk.Label(self.main_frame, image=self.logo)
+            logo_label.grid(row=0, column=0, pady=20, columnspan=2)
+        except Exception as e:
+            print(f"Error loading logo: {e}")
 
-        # Form fields
         ttk.Label(self.main_frame, text="Date (YYYY-MM-DD):").grid(row=1, column=0, sticky=tk.E, padx=10, pady=10)
         self.entry_date = ttk.Entry(self.main_frame, width=30)
         self.entry_date.grid(row=1, column=1, padx=10, pady=10)
@@ -47,7 +44,6 @@ class ExpenseTrackerApp:
         self.entry_amount = ttk.Entry(self.main_frame, width=30)
         self.entry_amount.grid(row=4, column=1, padx=10, pady=10)
 
-        # Buttons
         self.button_add = ttk.Button(self.main_frame, text="Add Expense", command=self.add_expense)
         self.button_add.grid(row=5, columnspan=2, pady=20)
 
@@ -79,12 +75,10 @@ class ExpenseTrackerApp:
     def load_expenses(self):
         expenses = get_all_expenses()
         
-        # Create a new window to display expenses
         expenses_window = tk.Toplevel(self.root)
         expenses_window.title("All Expenses")
         expenses_window.geometry("600x400")
 
-        # Create a treeview to display expenses
         tree = ttk.Treeview(expenses_window, columns=("Date", "Description", "Category", "Amount"), show='headings')
         tree.heading("Date", text="Date")
         tree.heading("Description", text="Description")
@@ -92,24 +86,21 @@ class ExpenseTrackerApp:
         tree.heading("Amount", text="Amount")
         tree.pack(expand=True, fill='both')
 
-        # Populate treeview with expenses
         for expense in expenses:
-            tree.insert("", tk.END, values=expense[1:])  # Skip the ID for display
+            tree.insert("", tk.END, values=expense[1:])  
 
     def show_expense_chart(self):
         expenses = get_all_expenses()
         categories = {}
         
-        # Aggregate expenses by category
         for expense in expenses:
-            category = expense[3]  # Get the category
-            amount = expense[4]  # Get the amount
+            category = expense[3]  
+            amount = expense[4]  
             if category in categories:
                 categories[category] += amount
             else:
                 categories[category] = amount
 
-        # Plotting the data
         plt.figure(figsize=(10, 6))
         plt.bar(categories.keys(), categories.values(), color='skyblue')
         plt.title("Expenses by Category")
